@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blog 1: The Art of Productive Coding</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #fff; 
+            color: #333; 
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #fff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        article {
+            margin-bottom: 20px;
+        }
+
+        footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .actions button {
+            padding: 8px 16px;
+            margin-right: 10px;
+            border: none;
+            border-radius: 4px;
+            background-color: #007bff;
+            color: #fff;
+            cursor: pointer;
+        }
+
+        .counter {
+            font-size: 14px;
+            color: #777;
+        }
+
+        .dark-mode .container {
+            background-color: #333; /* Set background color in dark mode */
+            color: #fff; /* Set text color in dark mode */
+        }
+
+        .dark-mode button {
+            background-color: #555; /* Adjust button background color in dark mode */
+        }
+
+        .comment {
+            background-color: #f5f5f5;
+            border-radius: 4px;
+            padding: 8px;
+            margin-bottom: 8px;
+            color: #333;
+            position: relative;
+        }
+
+        .comment button.delete-btn {
+            background-color: #dc3545;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 4px;
+            cursor: pointer;
+            position: absolute;
+            top: 5px;
+            right: 5px;
+        }
+
+        .dark-mode .comment {
+            color: #fff;
+            background-color: #333;
+        }
+
+        .dark-mode .comment button.delete-btn {
+            background-color: #dc3545;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Blog 1: The Art of Productive Coding</h1>
+            <button id="modeToggle" onclick="toggleMode()">Dark Mode</button>
+        </header>
+        <article>
+            <p>In this blog post, we'll explore various strategies and techniques for boosting productivity while coding. From setting up efficient development environments to managing project tasks effectively, we'll cover a range of tips to help you become a more productive coder.</p>
+        </article>
+        <footer>
+            <div class="actions">
+                <button id="likeBtn" onclick="like()">Like</button>
+                <button id="addCommentBtn" onclick="addComment()">Add Comment</button>
+            </div>
+            <div id="commentSection"></div>
+        </footer>
+    </div>
+
+    <script>
+        function toggleMode() {
+            var body = document.body;
+            var modeToggle = document.getElementById('modeToggle');
+            if (body.classList.contains('dark-mode')) {
+                body.classList.remove('dark-mode');
+                modeToggle.textContent = "Dark Mode";
+            } else {
+                body.classList.add('dark-mode');
+                modeToggle.textContent = "Light Mode";
+            }
+        }
+
+        function like() {
+            let likeCount = parseInt(localStorage.getItem('likeCount')) || 0;
+            let liked = localStorage.getItem('liked') === 'true';
+            if (!liked) {
+                likeCount++;
+                localStorage.setItem('liked', true);
+            } else {
+                likeCount--;
+                localStorage.setItem('liked', false);
+            }
+            localStorage.setItem('likeCount', likeCount);
+            document.getElementById('likeBtn').textContent = `Like (${likeCount})`;
+            updateStorage('likeCount', likeCount);
+            updateStorage('liked', liked ? 'false' : 'true');
+        }
+
+        function addComment() {
+            let comment = prompt('Enter your comment:');
+            if (comment) {
+                let commentSection = document.getElementById('commentSection');
+                let newComment = document.createElement('div');
+                newComment.classList.add('comment');
+                newComment.innerHTML = `
+                    <p>${comment}</p>
+                    <button class="delete-btn" onclick="deleteComment(this)">Delete</button>
+                `;
+                commentSection.appendChild(newComment);
+                updateStorage('comments', commentSection.innerHTML);
+            }
+        }
+
+        function deleteComment(btn) {
+            let comment = btn.parentNode;
+            comment.parentNode.removeChild(comment);
+            updateStorage('comments', document.getElementById('commentSection').innerHTML);
+        }
+
+        function updateStorage(key, value) {
+            localStorage.setItem(key, value);
+        }
+
+        function applyLocalStorageData() {
+            let likeCount = localStorage.getItem('likeCount') || 0;
+            let liked = localStorage.getItem('liked') === 'true';
+            document.getElementById('likeBtn').textContent = `Like (${likeCount})`;
+            if (liked) {
+                document.getElementById('likeBtn').textContent = 'Unlike';
+            }
+            let comments = localStorage.getItem('comments');
+            if (comments) {
+                document.getElementById('commentSection').innerHTML = comments;
+            }
+        }
+
+        window.onload = applyLocalStorageData;
+    </script>
+</body>
+</html>
