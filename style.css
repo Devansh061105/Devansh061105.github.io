@@ -318,7 +318,7 @@ h2 {
 .blogs h2 {
     font-size: 32px;
     margin-bottom: 30px;
-    color: #00a2ff; /* Change heading color to light blue */
+    color: #00a2ff; 
 }
 
 .blog-container {
@@ -348,7 +348,7 @@ h2 {
     font-size: 18px;
     line-height: 1.6;
     margin-bottom: 20px;
-    color: #ddd; /* Change text color to light grey */
+    color: #ddd; 
 }
 
 
